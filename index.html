@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#246b45">
+<meta name="description" content="مساعد زراعي لإدارة المزرعة والري والتشخيص الإرشادي والكومبوست">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>مساعد المزرعة</title>
+<style>
+:root{--pri:#246b45;--bg:#f3f7f2;--card:#fff;--tx:#203127;--muted:#627268;--bd:#dce6dc;--warn:#a34a00}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.55}
+header{background:linear-gradient(135deg,#194e34,#2f8054);color:white;padding:18px 16px 20px;border-radius:0 0 22px 22px}
+header h1{font-size:1.35rem;margin:0 0 4px}header p{margin:0;opacity:.9;font-size:.9rem}
+main{max-width:850px;margin:0 auto;padding:12px 12px 40px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0}.top label{margin:0}
+select,input,textarea,button{font:inherit}input,select,textarea{width:100%;border:1px solid var(--bd);border-radius:11px;padding:11px;background:#fff;color:var(--tx);min-width:0}
+label{display:block;font-weight:650;font-size:.92rem;margin:10px 0 5px}
+button{border:0;border-radius:11px;padding:11px 14px;background:var(--pri);color:white;font-weight:650;cursor:pointer}
+button.sec{background:#e6f0e7;color:#1e5939;border:1px solid #cfe0d0}
+button:disabled{opacity:.5}.row{display:flex;gap:10px;align-items:end}.row>*{flex:1;min-width:0}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:15px;margin:12px 0;box-shadow:0 3px 12px #163b1708}
+.card h2{font-size:1.08rem;margin:0 0 10px;color:#225a3b}.note{color:var(--muted);font-size:.9rem}.warn{color:var(--warn);background:#fff3e5;padding:9px;border-radius:9px}
+.bar{height:8px;background:#e4ebe4;border-radius:6px;overflow:hidden;margin:2px 0 6px}.bar i{display:block;height:100%;background:var(--pri)}
+.nav{position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0}.nav button{font-size:.78rem;padding:10px 3px}
+.chk{display:flex;align-items:center;gap:8px;font-weight:500}.chk input{width:auto}
+.pimg{max-width:100%;max-height:280px;display:block;object-fit:contain;border-radius:12px;margin:10px auto}
+details{border:1px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0}summary{font-weight:700;cursor:pointer}
+ul{padding-inline-start:22px}li{margin:6px 0}.tr{display:block}.pv{display:block;color:var(--muted);font-size:.9rem}
+#today{padding:12px;background:#e8f3e8;border-radius:12px;margin:10px 0}
+footer{text-align:center;color:var(--muted);font-size:.82rem;padding:20px}
+@media(max-width:520px){.row{gap:7px}.row input,.row select{padding:10px 8px}.card{padding:12px}.nav button{font-size:.72rem}}
+</style>
+</head>
+<body>
+<header><h1>🌱 مساعد المزرعة</h1><p id="subtitle">إدارة المحاصيل والري والتشخيص والكومبوست</p></header>
+<main>
+<div class="top"><label for="lang" id="langLabel">لغة التطبيق</label><select id="lang" aria-label="Language" style="max-width:180px"><option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option></select></div>
+<div id="today">🌤️ مساعدك الزراعي اليومي</div>
+<section class="card" id="singleInputs">
+<h2 id="singleTitle">🌾 الحقل / قطعة واحدة</h2>
+<div class="row"><div><label id="cropLabel" for="crop">المحصول</label><select id="crop"></select></div><div><label id="areaLabel" for="area">المساحة (م²)</label><input id="area" type="number" min="1" value="100"></div></div>
+<div class="row"><div><label id="envLabel" for="env">نوع الزراعة</label><select id="env"><option value="open">حقل مفتوح</option><option value="gh">بيت محمي</option></select></div><div><label id="irrLabel" for="irr">طريقة الري</label><select id="irr"><option value="drip">تنقيط</option><option value="spr">رش</option><option value="flood">غمر</option></select></div></div>
+<div class="row"><div><label id="sowLabel" for="sow">تاريخ البذر/الغرس</label><input id="sow" type="date"></div><div><label id="soilLabel" for="soil">التربة</label><select id="soil"><option value="sand">رملية</option><option value="loam">متوسطة</option><option value="clay">طينية</option></select></div></div>
+<div class="row"><div><label id="compLabel" for="comp">المادة العضوية</label><select id="comp"><option value="low">منخفضة</option><option value="medium" selected>متوسطة</option><option value="good">جيدة</option></select></div><div><label id="latLabel" for="lat">خط العرض (اختياري)</label><input id="lat" type="number" step="any" placeholder="18.1"></div></div>
+<div class="row"><div><label id="lonLabel" for="lon">خط الطول (اختياري)</label><input id="lon" type="number" step="any" placeholder="-15.9"></div><div><label id="tempLabel" for="temp">الحرارة الحالية °م</label><input id="temp" type="number" value="32"></div></div>
+<div class="row"><div><label id="minTempLabel" for="minTemp">الحرارة الصغرى °م</label><input id="minTemp" type="number" value="22"></div><div><label id="maxTempLabel" for="maxTemp">الحرارة العظمى °م</label><input id="maxTemp" type="number" value="38"></div></div>
+<button id="calcBtn" type="button" style="margin-top:12px;width:100%">احسب احتياجات الحقل</button>
+<div id="singleResult" aria-live="polite"></div>
+</section>
+<p data-t="disc" class="note">تنبيه: النتائج تقديرية إرشادية وليست بديلاً عن القياس الحقلي أو استشارة مهندس زراعي.</p>
+</main>
+<footer>Farm Advisor · يعمل محليًا على هذا الجهاز</footer>
+<script src="core.js"></script>
+<script src="farm.js"></script>
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script>
+</body></html>
