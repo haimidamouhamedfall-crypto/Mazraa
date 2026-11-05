@@ -1,62 +1,155 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#246b45">
-<meta name="description" content="مساعد زراعي لإدارة المزرعة والري والتشخيص الإرشادي والكومبوست">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
-<title>مساعد المزرعة</title>
+<title>محاكي تقييم المزارع</title>
 <style>
-:root{--pri:#246b45;--bg:#f3f7f2;--card:#fff;--tx:#203127;--muted:#627268;--bd:#dce6dc;--warn:#a34a00}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.55}
-header{background:linear-gradient(135deg,#194e34,#2f8054);color:white;padding:18px 16px 20px;border-radius:0 0 22px 22px}
-header h1{font-size:1.35rem;margin:0 0 4px}header p{margin:0;opacity:.9;font-size:.9rem}
-main{max-width:850px;margin:0 auto;padding:12px 12px 40px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0}.top label{margin:0}
-select,input,textarea,button{font:inherit}input,select,textarea{width:100%;border:1px solid var(--bd);border-radius:11px;padding:11px;background:#fff;color:var(--tx);min-width:0}
-label{display:block;font-weight:650;font-size:.92rem;margin:10px 0 5px}
-button{border:0;border-radius:11px;padding:11px 14px;background:var(--pri);color:white;font-weight:650;cursor:pointer}
-button.sec{background:#e6f0e7;color:#1e5939;border:1px solid #cfe0d0}
-button:disabled{opacity:.5}.row{display:flex;gap:10px;align-items:end}.row>*{flex:1;min-width:0}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:15px;margin:12px 0;box-shadow:0 3px 12px #163b1708}
-.card h2{font-size:1.08rem;margin:0 0 10px;color:#225a3b}.note{color:var(--muted);font-size:.9rem}.warn{color:var(--warn);background:#fff3e5;padding:9px;border-radius:9px}
-.bar{height:8px;background:#e4ebe4;border-radius:6px;overflow:hidden;margin:2px 0 6px}.bar i{display:block;height:100%;background:var(--pri)}
-.nav{position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0}.nav button{font-size:.78rem;padding:10px 3px}
-.chk{display:flex;align-items:center;gap:8px;font-weight:500}.chk input{width:auto}
-.pimg{max-width:100%;max-height:280px;display:block;object-fit:contain;border-radius:12px;margin:10px auto}
-details{border:1px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0}summary{font-weight:700;cursor:pointer}
-ul{padding-inline-start:22px}li{margin:6px 0}.tr{display:block}.pv{display:block;color:var(--muted);font-size:.9rem}
-#today{padding:12px;background:#e8f3e8;border-radius:12px;margin:10px 0}
-footer{text-align:center;color:var(--muted);font-size:.82rem;padding:20px}
-@media(max-width:520px){.row{gap:7px}.row input,.row select{padding:10px 8px}.card{padding:12px}.nav button{font-size:.72rem}}
+:root{--bg:#f6f7f2;--card:#fff;--tx:#1d2a1f;--mu:#667064;--pr:#2e7d32;--prt:#fff;--bd:#d9dccf;--wa:#b26a00;--er:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a15;--card:#1e271f;--tx:#e8ede6;--mu:#9aa798;--pr:#66bb6a;--prt:#0d1a0e;--bd:#33402f;--wa:#e0a040;--er:#f2837c}}
+:root[data-theme="dark"]{--bg:#141a15;--card:#1e271f;--tx:#e8ede6;--mu:#9aa798;--pr:#66bb6a;--prt:#0d1a0e;--bd:#33402f;--wa:#e0a040;--er:#f2837c}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif}
+.w{max-width:560px;margin:0 auto;padding:14px}
+h1{font-size:20px;margin:6px 0 2px}h2{font-size:18px;margin:4px 0 12px}
+.sub{color:var(--mu);font-size:14px;margin:0 0 10px}
+.bar{height:6px;background:var(--bd);border-radius:4px;margin:10px 0 14px;overflow:hidden}.bar i{display:block;height:100%;background:var(--pr);transition:width .2s}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+label{display:block;font-weight:600;margin:12px 0 4px;font-size:15px}
+input[type=text],input[type=tel],input[type=number],select,textarea{width:100%;font:inherit;padding:11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx)}
+textarea{min-height:70px}
+.ch{display:flex;flex-wrap:wrap;gap:8px}
+.ch label{margin:0;font-weight:400;display:flex;align-items:center;gap:6px;border:1px solid var(--bd);border-radius:20px;padding:7px 12px;background:var(--bg)}
+.ch input{accent-color:var(--pr);width:18px;height:18px}
+.big{display:block;width:100%;text-align:center;font:inherit;font-weight:700;font-size:18px;padding:18px;margin:10px 0;border-radius:14px;border:2px solid var(--pr);background:var(--card);color:var(--tx)}
+.big small{display:block;font-weight:400;color:var(--mu);font-size:13px}
+.btn{font:inherit;font-weight:700;padding:13px 18px;border-radius:12px;border:0;background:var(--pr);color:var(--prt)}
+.btn.s{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.nav{display:flex;gap:10px;margin-top:8px}.nav .btn{flex:1}
+.row{display:flex;gap:8px}.row>*{flex:1}
+img.ph{max-width:100%;border-radius:10px;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td{padding:7px 6px;border-bottom:1px solid var(--bd);vertical-align:top}td:first-child{color:var(--mu);width:42%}
+.sc{text-align:center;font-size:44px;font-weight:800;color:var(--pr);margin:0}
+.lv{text-align:center;font-weight:700;margin:0 0 8px}
+ul{margin:6px 0;padding-inline-start:20px}
+.msg{font-size:14px;color:var(--wa);margin-top:6px}
 </style>
 </head>
 <body>
-<header><h1>🌱 مساعد المزرعة</h1><p id="subtitle">إدارة المحاصيل والري والتشخيص والكومبوست</p></header>
-<main>
-<div class="top"><label for="lang" id="langLabel">لغة التطبيق</label><select id="lang" aria-label="Language" style="max-width:180px"><option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option></select></div>
-<div id="today">🌤️ مساعدك الزراعي اليومي</div>
-<section class="card" id="singleInputs">
-<h2 id="singleTitle">🌾 الحقل / قطعة واحدة</h2>
-<div class="row"><div><label id="cropLabel" for="crop">المحصول</label><select id="crop"></select></div><div><label id="areaLabel" for="area">المساحة (م²)</label><input id="area" type="number" min="1" value="100"></div></div>
-<div class="row"><div><label id="envLabel" for="env">نوع الزراعة</label><select id="env"><option value="open">حقل مفتوح</option><option value="gh">بيت محمي</option></select></div><div><label id="irrLabel" for="irr">طريقة الري</label><select id="irr"><option value="drip">تنقيط</option><option value="spr">رش</option><option value="flood">غمر</option></select></div></div>
-<div class="row"><div><label id="sowLabel" for="sow">تاريخ البذر/الغرس</label><input id="sow" type="date"></div><div><label id="soilLabel" for="soil">التربة</label><select id="soil"><option value="sand">رملية</option><option value="loam">متوسطة</option><option value="clay">طينية</option></select></div></div>
-<div class="row"><div><label id="compLabel" for="comp">المادة العضوية</label><select id="comp"><option value="low">منخفضة</option><option value="medium" selected>متوسطة</option><option value="good">جيدة</option></select></div><div><label id="latLabel" for="lat">خط العرض (اختياري)</label><input id="lat" type="number" step="any" placeholder="18.1"></div></div>
-<div class="row"><div><label id="lonLabel" for="lon">خط الطول (اختياري)</label><input id="lon" type="number" step="any" placeholder="-15.9"></div><div><label id="tempLabel" for="temp">الحرارة الحالية °م</label><input id="temp" type="number" value="32"></div></div>
-<div class="row"><div><label id="minTempLabel" for="minTemp">الحرارة الصغرى °م</label><input id="minTemp" type="number" value="22"></div><div><label id="maxTempLabel" for="maxTemp">الحرارة العظمى °م</label><input id="maxTemp" type="number" value="38"></div></div>
-<button id="calcBtn" type="button" style="margin-top:12px;width:100%">احسب احتياجات الحقل</button>
-<div id="singleResult" aria-live="polite"></div>
-</section>
-<p data-t="disc" class="note">تنبيه: النتائج تقديرية إرشادية وليست بديلاً عن القياس الحقلي أو استشارة مهندس زراعي.</p>
-</main>
-<footer>Farm Advisor · يعمل محليًا على هذا الجهاز</footer>
-<script src="core.js"></script>
-<script src="farm.js"></script>
+<div class="w">
+<h1>🌱 محاكي تقييم المزارع</h1>
+<div class="bar"><i id="pg"></i></div>
+<div id="app"></div>
+</div>
 <script>
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+var CROPS={'خضروات':['طماطم','بصل','جزر','بطاطا','كوسة','خيار','فلفل','ملفوف','أخرى'],'أرز':['أرز مروي','أرز مطري','أخرى'],'زراعة تقليدية':['ذرة','فاصوليا','دخن','سرغم','بطيخ','لوبيا','أخرى']};
+var EQ=['مضخة مياه','جرار / محراث','نظام ري بالتنقيط','رشاش مبيدات','حاصدة / آلة حصاد','مخزن','سياج / شبك'];
+var IN=['بذور','أسمدة كيميائية','سماد عضوي / كومبوست','مبيدات','وقود / كهرباء','يد عاملة موسمية'];
+var PE=['الجراد','دودة الحشد','حشرات ماصة','طيور','قوارض','أمراض فطرية','حيوانات سائبة','لا توجد آفات'];
+var F=[
+{t:'المسؤول والعاملون',f:[
+{id:'name',l:function(){return S.proj=='تعاونية'?'اسم رئيس التعاونية':'اسم صاحب المشروع'},k:'text'},
+{id:'phone',l:'رقم الهاتف',k:'tel'},
+{id:'members',l:'عدد المنتسبين',k:'num',only:'تعاونية'},
+{id:'workers',l:'عدد العاملين',k:'num'}]},
+{t:'المياه والتربة والآفات',f:[
+{id:'wsrc',l:'مصدر المياه',k:'sel',o:['بئر','سد / حاجز','نهر / مجرى','شبكة عمومية','مياه أمطار']},
+{id:'wav',l:'توفر المياه',k:'sel',o:['دائمة','موسمية','ضعيفة','منعدمة']},
+{id:'wq',l:'جودة المياه',k:'sel',o:['جيدة','متوسطة','مالحة','ملوثة']},
+{id:'soil',l:'نوعية التربة',k:'sel',o:['رملية','طينية','طميية','مالحة','حصوية','مختلطة']},
+{id:'pests',l:'الآفات المسجلة',k:'chk',o:PE},
+{id:'pnote',l:'ملاحظات عن الآفات',k:'area'}]},
+{t:'الموقع والصورة',f:[
+{id:'gps',l:'الإحداثيات',k:'gps'},
+{id:'photo',l:'صورة الموقع',k:'photo'}]},
+{t:'المساحات',f:[
+{id:'fenced',l:'المساحة المسيجة (هكتار)',k:'num'},
+{id:'planted',l:'المساحة المزروعة (هكتار)',k:'num'}]},
+{t:'المعدات والمدخلات',f:[
+{id:'equip',l:'المعدات الزراعية المتوفرة',k:'chk',o:EQ},
+{id:'inputs',l:'المدخلات الزراعية المتوفرة',k:'chk',o:IN}]},
+{t:'آخر حملة زراعية',f:[
+{id:'cseason',l:'الموسم / السنة',k:'text'},
+{id:'ccrop',l:'المحصول',k:'sel',o:function(){return CROPS[S.crop]}},
+{id:'cprod',l:'الإنتاج (كغ)',k:'num'},
+{id:'rating',l:'تقييم الحملة',k:'sel',o:['5 ممتازة','4 جيدة','3 متوسطة','2 ضعيفة','1 فاشلة']},
+{id:'cnote',l:'ملاحظات على الحملة',k:'area'}]},
+{t:'التكلفة والعائد',f:[
+{id:'cost',l:'التكلفة المقدرة (أوقية)',k:'num'},
+{id:'rev',l:'العائد من المبيعات (أوقية)',k:'num'}]}
+];
+var S={crop:'',proj:''},V={},step=0,N=F.length+3,app=document.getElementById('app');
+try{var sv=JSON.parse(localStorage.getItem('fa1')||'null');if(sv){S=sv.S;V=sv.V;}}catch(e){}
+function save(){try{var v=Object.assign({},V);delete v.photo;localStorage.setItem('fa1',JSON.stringify({S:S,V:v}))}catch(e){}}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function opts(o){return typeof o=='function'?o():o}
+function show(){
+ document.getElementById('pg').style.width=(step/(N-1)*100)+'%';
+ window.scrollTo(0,0);
+ if(step==0){app.innerHTML='<h2>١ — نوع الزراعة</h2><p class="sub">اختر نوع النشاط الزراعي</p>'+Object.keys(CROPS).map(function(c){return '<button class="big" onclick="pick(\'crop\',\''+c+'\')">'+c+'<small>'+(c=='زراعة تقليدية'?'ذرة، فاصوليا، دخن...':c=='خضروات'?'طماطم، بصل، جزر...':'مروي أو مطري')+'</small></button>'}).join('');return}
+ if(step==1){app.innerHTML='<h2>٢ — نوع المشروع</h2><p class="sub">النشاط: '+esc(S.crop)+'</p><button class="big" onclick="pick(\'proj\',\'تعاونية\')">تعاونية<small>مشروع جماعي</small></button><button class="big" onclick="pick(\'proj\',\'مشروع شخصي\')">مشروع شخصي<small>مزارع فرد</small></button><div class="nav"><button class="btn s" onclick="go(-1)">رجوع</button></div>';return}
+ if(step==N-1){result();return}
+ var sec=F[step-2],h='<h2>'+(step+1)+' — '+sec.t+'</h2><div class="card">';
+ sec.f.forEach(function(f){
+  if(f.only&&f.only!=S.proj)return;
+  var l=typeof f.l=='function'?f.l():f.l,v=V[f.id];
+  h+='<label>'+l+'</label>';
+  if(f.k=='text'||f.k=='tel')h+='<input type="'+(f.k=='tel'?'tel':'text')+'" value="'+esc(v)+'" oninput="V.'+f.id+'=this.value;save()">';
+  else if(f.k=='num')h+='<input type="number" inputmode="decimal" min="0" value="'+esc(v)+'" oninput="V.'+f.id+'=this.value;save()">';
+  else if(f.k=='area')h+='<textarea oninput="V.'+f.id+'=this.value;save()">'+esc(v)+'</textarea>';
+  else if(f.k=='sel')h+='<select onchange="V.'+f.id+'=this.value;save()"><option value="">— اختر —</option>'+opts(f.o).map(function(o){return '<option'+(v==o?' selected':'')+'>'+o+'</option>'}).join('')+'</select>';
+  else if(f.k=='chk')h+='<div class="ch">'+f.o.map(function(o,i){return '<label><input type="checkbox"'+((v||[]).indexOf(o)>-1?' checked':'')+' onchange="tg(\''+f.id+'\','+i+',this.checked)">'+o+'</label>'}).join('')+'</div>';
+  else if(f.k=='gps')h+='<button class="btn s" style="width:100%" onclick="gps()">📍 تحديد موقعي الحالي</button><div class="row" style="margin-top:8px"><input type="number" step="any" placeholder="خط العرض" value="'+esc(V.lat)+'" oninput="V.lat=this.value;save()"><input type="number" step="any" placeholder="خط الطول" value="'+esc(V.lng)+'" oninput="V.lng=this.value;save()"></div><div class="msg" id="gm"></div>';
+  else if(f.k=='photo')h+='<input type="file" accept="image/*" onchange="photo(this)">'+(V.photo?'<img class="ph" src="'+V.photo+'">':'');
+ });
+ h+='</div><div class="nav"><button class="btn s" onclick="go(-1)">رجوع</button><button class="btn" onclick="go(1)">التالي</button></div>';
+ app.innerHTML=h;
 }
+function pick(k,v){S[k]=v;save();step++;show()}
+function go(d){step+=d;show()}
+function tg(id,i,on){var o=id=='pests'?PE:id=='equip'?EQ:IN,a=V[id]||[],x=o[i],p=a.indexOf(x);if(on&&p<0)a.push(x);if(!on&&p>-1)a.splice(p,1);V[id]=a;save()}
+function gps(){var m=document.getElementById('gm');m.textContent='جارٍ التحديد...';
+ if(!navigator.geolocation){m.textContent='غير متاح — أدخل الإحداثيات يدوياً';return}
+ navigator.geolocation.getCurrentPosition(function(p){V.lat=p.coords.latitude.toFixed(6);V.lng=p.coords.longitude.toFixed(6);save();show()},function(){m.textContent='تعذر التحديد — أدخل الإحداثيات يدوياً'},{enableHighAccuracy:true,timeout:15000})}
+function photo(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);V.photo=c.toDataURL('image/jpeg',.7);show()};im.src=r.result};r.readAsDataURL(f)}
+function nz(x){return +x||0}
+function profit(){return nz(V.rev)-nz(V.cost)}
+function score(){var p=0,m=0;
+ m+=2;p+=V.wav=='دائمة'?2:V.wav=='موسمية'?1:0;
+ m+=2;p+=V.wq=='جيدة'?2:V.wq=='متوسطة'?1:0;
+ m+=2;p+=2*(V.equip||[]).length/EQ.length;
+ m+=2;p+=2*(V.inputs||[]).length/IN.length;
+ m+=1;if(nz(V.fenced)>0)p+=Math.min(nz(V.planted)/nz(V.fenced),1);
+ m+=2;if(profit()>0)p+=2;
+ m+=1;p+=nz((V.rating||'0')[0])/5;
+ return Math.round(p/m*100)}
+function notes(){var n=[],pe=(V.pests||[]).filter(function(x){return x!='لا توجد آفات'});
+ if(V.wav!='دائمة')n.push('تأمين مصدر مياه دائم أو خزان تخزين');
+ if(V.wq=='مالحة'||V.wq=='ملوثة')n.push('معالجة جودة المياه أو اختيار محاصيل تتحمل الملوحة');
+ if((V.equip||[]).length<EQ.length/2)n.push('استكمال المعدات الأساسية (مضخة، ري، سياج)');
+ if((V.inputs||[]).length<IN.length/2)n.push('توفير المدخلات قبل بداية الموسم');
+ if(nz(V.fenced)>0&&nz(V.planted)/nz(V.fenced)<.5)n.push('توسيع المساحة المزروعة داخل السياج');
+ if(pe.length)n.push('وضع برنامج مكافحة للآفات: '+pe.join('، '));
+ if((V.cost||V.rev)&&profit()<0)n.push('مراجعة التكاليف: الحملة خاسرة');
+ if(!n.length)n.push('الوضع جيد — حافظ على المستوى وسجّل بيانات كل موسم');
+ return n}
+function rows(){var cp=nz(V.fenced)?(nz(V.planted)/nz(V.fenced)*100).toFixed(0)+'%':'—';
+ return [['نوع الزراعة',S.crop],['نوع المشروع',S.proj],[S.proj=='تعاونية'?'رئيس التعاونية':'صاحب المشروع',V.name],['الهاتف',V.phone],['عدد المنتسبين',S.proj=='تعاونية'?V.members:'—'],['عدد العاملين',V.workers],['مصدر المياه',V.wsrc],['توفر المياه',V.wav],['جودة المياه',V.wq],['نوعية التربة',V.soil],['الآفات المسجلة',(V.pests||[]).join('، ')],['ملاحظات الآفات',V.pnote],['الإحداثيات',V.lat&&V.lng?V.lat+' , '+V.lng:''],['المساحة المسيجة (هكتار)',V.fenced],['المساحة المزروعة (هكتار)',V.planted],['نسبة الاستغلال',cp],['المعدات المتوفرة',(V.equip||[]).join('، ')],['المدخلات المتوفرة',(V.inputs||[]).join('، ')],['آخر حملة',V.cseason],['محصول الحملة',V.ccrop],['الإنتاج (كغ)',V.cprod],['تقييم الحملة',V.rating],['ملاحظات الحملة',V.cnote],['التكلفة (أوقية)',V.cost],['العائد (أوقية)',V.rev],['الربح / الخسارة (أوقية)',profit()]]}
+function body(){var sc=score(),lv=sc>=70?'وضع جيد':sc>=40?'وضع متوسط':'وضع ضعيف';
+ return '<p class="sc">'+sc+'/100</p><p class="lv">'+lv+'</p><table>'+rows().map(function(r){return '<tr><td>'+r[0]+'</td><td>'+esc(r[1]===undefined||r[1]===''?'—':r[1])+'</td></tr>'}).join('')+'</table>'+(V.photo?'<img class="ph" src="'+V.photo+'">':'')+'<h2 style="margin-top:14px">توصيات</h2><ul>'+notes().map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>'}
+function result(){app.innerHTML='<h2>الملف النهائي</h2><div class="card">'+body()+'</div><div class="nav"><button class="btn" onclick="dl(\'html\')">⬇ تقرير</button><button class="btn" onclick="dl(\'csv\')">⬇ جدول CSV</button></div><div class="nav"><button class="btn s" onclick="go(-1)">رجوع</button><button class="btn s" onclick="reset()">جديد</button></div><div class="msg" id="dm"></div>'}
+async function dl(t){var m=document.getElementById('dm'),d=null;
+ try{d=await claude.use('downloads')}catch(e){}
+  var blob;
+ if(t=='csv')blob=new Blob(['\ufeff'+rows().map(function(r){return '"'+String(r[0]).replace(/"/g,'""')+'","'+String(r[1]==null?'':r[1]).replace(/"/g,'""')+'"'}).join('\n')],{type:'text/csv'});
+ else blob=new Blob(['<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>تقييم المزارع</title><style>body{font-family:system-ui,Arial;max-width:640px;margin:auto;padding:16px;color:#1d2a1f}table{width:100%;border-collapse:collapse}td{padding:7px;border-bottom:1px solid #ccc}td:first-child{color:#667064;width:40%}.sc{text-align:center;font-size:40px;font-weight:800;color:#2e7d32;margin:0}.lv{text-align:center;font-weight:700}img{max-width:100%}</style></head><body><h1>تقييم المزارع</h1><p>التاريخ: '+new Date().toLocaleDateString('ar')+'</p>'+body()+'</body></html>'],{type:'text/html'});
+ var fn=t=='csv'?'farm-assessment.csv':'farm-assessment.html';
+ if(d){try{await d.save({filename:fn,data:blob});m.textContent=''}catch(e){m.textContent=e&&e.code=='declined'?'':'تعذر الحفظ'}return}
+ var u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000);m.textContent='تم تجهيز الملف في التنزيلات'}
+function reset(){if(!confirm('بدء تقييم جديد ومسح البيانات؟'))return;S={crop:'',proj:''};V={};save();step=0;show()}
+step=0;show();
 </script>
-</body></html>
+</body>
+</html>
