@@ -102,7 +102,7 @@ function show(){
   else if(f.k=='sel')h+='<select onchange="V.'+f.id+'=this.value;save()"><option value="">— اختر —</option>'+opts(f.o).map(function(o){return '<option'+(v==o?' selected':'')+'>'+o+'</option>'}).join('')+'</select>';
   else if(f.k=='chk')h+='<div class="ch">'+f.o.map(function(o,i){return '<label><input type="checkbox"'+((v||[]).indexOf(o)>-1?' checked':'')+' onchange="tg(\''+f.id+'\','+i+',this.checked)">'+o+'</label>'}).join('')+'</div>';
   else if(f.k=='gps')h+='<button class="btn s" style="width:100%" onclick="gps()">📍 تحديد موقعي الحالي</button><div class="row" style="margin-top:8px"><input type="number" step="any" placeholder="خط العرض" value="'+esc(V.lat)+'" oninput="V.lat=this.value;save()"><input type="number" step="any" placeholder="خط الطول" value="'+esc(V.lng)+'" oninput="V.lng=this.value;save()"></div><div class="msg" id="gm"></div>';
-  else if(f.k=='photo')h+='<input type="file" accept="image/*" onchange="photo(this)">'+(V.photo?'<img class="ph" src="'+V.photo+'">':'');
+  else if(f.k=='photo')h+='<div class="row"><button class="btn" onclick="document.getElementById(\'cam\').click()">📷 التقاط صورة</button><button class="btn s" onclick="document.getElementById(\'gal\').click()">🖼 من المعرض</button></div><input id="cam" type="file" accept="image/*" capture="environment" hidden onchange="photo(this)"><input id="gal" type="file" accept="image/*" hidden onchange="photo(this)">'+(V.photo?'<img class="ph" src="'+V.photo+'"><button class="btn s" style="width:100%;margin-top:8px" onclick="delete V.photo;show()">🗑 حذف الصورة</button>':'');
  });
  h+='</div><div class="nav"><button class="btn s" onclick="go(-1)">رجوع</button><button class="btn" onclick="go(1)">التالي</button></div>';
  app.innerHTML=h;
